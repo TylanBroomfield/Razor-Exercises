@@ -1,8 +1,77 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = string.Format("Razor - {0}", "Exercise 01");
+    var myname = Request.Form["dataentry"];
+    var thebutton = Request.Form["theButton"];
+    string choices = "";
+}
 }
 
 @section banner {
     <h1>@Page.Title</h1>
 }
+
+@if (IsPost)
+{
+    //this true path is done IF this page is returning
+    //from the previous sending
+
+    //IF you have multiple buttons on your form, you SHOULD
+    //determine which button was pressed; thus; dictating WHICH
+    //logic is to be EXECUTED
+    if (thebutton.Equals("submit"))
+    {
+        //the Press Me button was pressed
+        if (string.IsNullOrEmpty(myname))
+        {
+            <p>You should enter your name.</p>
+        }
+        else
+        {
+            <p>
+                @myname, I see you have the following meal entries:
+                <ul>
+                    @foreach (var platform in choices.Split(','))
+                    {
+                        <li></li>
+                    }
+                </ul>
+            </p>
+        }
+    }
+    else
+    {
+        //the Clear button was pressed
+        myname = "";
+        <p>Use pressed the clear button</p>
+
+    }
+}
+else
+{
+    // use to initialize items on your form BEFORE it is sent
+    // to the user for the FIRST time.
+    <p>this is the first time on this page.</p>
+}
+
+
+<form id="theform" method="post">
+
+        <label id="label1" for="dataentry">Customer Name:</label>&nbsp;&nbsp;
+        <input type="text" id="dataentry" name="dataentry"
+               value="@myname" />
+
+    <br /><br />
+    <div class="row">
+        <div class="offset-1">
+            <button type="submit" id="theButton" name="theButton"
+                    value="submit" class="btn btn-primary">
+                Submit
+            </button>&nbsp;&nbsp;
+            <button type="submit" id="theButton" name="theButton"
+                    value="reset" class="btn btn-light">
+                Reset
+            </button>
+        </div>
+    </div>
+</form>
