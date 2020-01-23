@@ -5,7 +5,7 @@
     var thebutton = Request.Form["theButton"];
     string choices = "";
 }
-}
+
 
 @section banner {
     <h1>@Page.Title</h1>
@@ -25,19 +25,26 @@
     if (thebutton.Equals("submit"))
     {
         //the Press Me button was pressed
-        if (string.IsNullOrEmpty(myname) || choices.IsEmpty())
+        if (string.IsNullOrEmpty(myname))
         {
-            <p>You should enter your name and meal choices.</p>
+            <p>You should enter your name</p>
         }
+
+        else if (choices.IsEmpty())
+        {
+            <p>Please choose a food</p>
+            choices = "";
+        }
+
         else
         {
             <p>
                 @myname, I see you have the following meal entries:
                 <ul>
-                    @foreach (var food in choices.Split(','))
-                    {
-                        <li>@food</li>
-                    }
+                     @foreach (var food in choices.Split(','))
+                     {
+                         <li>@food</li>
+                     }
                 </ul>
             </p>
         }
@@ -51,12 +58,7 @@
 
     }
 }
-else
-{
-    // use to initialize items on your form BEFORE it is sent
-    // to the user for the FIRST time.
-    <p>this is the first time on this page.</p>
-}
+
 
 
 <form id="theform" method="post">
