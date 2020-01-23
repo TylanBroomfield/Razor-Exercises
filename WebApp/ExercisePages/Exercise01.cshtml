@@ -19,21 +19,24 @@
     //IF you have multiple buttons on your form, you SHOULD
     //determine which button was pressed; thus; dictating WHICH
     //logic is to be EXECUTED
+
+    choices = "";
+    choices = Request.Form["GameGroup"];
     if (thebutton.Equals("submit"))
     {
         //the Press Me button was pressed
-        if (string.IsNullOrEmpty(myname))
+        if (string.IsNullOrEmpty(myname) || choices.IsEmpty())
         {
-            <p>You should enter your name.</p>
+            <p>You should enter your name and meal choices.</p>
         }
         else
         {
             <p>
                 @myname, I see you have the following meal entries:
                 <ul>
-                    @foreach (var platform in choices.Split(','))
+                    @foreach (var food in choices.Split(','))
                     {
-                        <li></li>
+                        <li>@food</li>
                     }
                 </ul>
             </p>
@@ -43,7 +46,8 @@
     {
         //the Clear button was pressed
         myname = "";
-        <p>Use pressed the clear button</p>
+        choices = "";
+        <p>User pressed the clear button</p>
 
     }
 }
@@ -57,10 +61,23 @@ else
 
 <form id="theform" method="post">
 
-        <label class="col" id="label1" for="dataentry">Customer Name:</label>&nbsp;&nbsp;
-        <input type="text" id="dataentry" name="dataentry"
-               value="@myname" />
+    <div class="row">
+        <div>
+            <label class="col" id="label1" for="dataentry">Customer Name:</label>&nbsp;&nbsp;
+            <input type="text" id="dataentry" name="dataentry"
+                   value="@myname" />
+        </div>
+        <div class="offset-1">
+            <label id="lblGameGroup">Choose your Meal Items</label><br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="Steak"
+                   @(Array.IndexOf(choices.Split(','), "Steak") >= 0 ? "checked" : "") />Steak<br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="Seafood"
+                   @(Array.IndexOf(choices.Split(','), "Seafood") >= 0 ? "checked" : "") />Seafood<br />
+            <input type="checkbox" id="GameGroup" name="GameGroup" value="Vegetables"
+                   @(Array.IndexOf(choices.Split(','), "Vegetables") >= 0 ? "checked" : "") />Vegetables<br />
+        </div>
 
+    </div>
     <br /><br />
     <div class="row">
         <div>
