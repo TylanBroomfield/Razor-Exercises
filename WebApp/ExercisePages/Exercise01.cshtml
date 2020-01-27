@@ -61,24 +61,25 @@
 
 
 
-<form id="theform" method="post">
+<form id="EX01" method="post">
 
-    <div class="row">
-        <div>
-            <label class="col" id="label1" for="dataentry">Customer Name:</label>&nbsp;&nbsp;
-            <input type="text" id="dataentry" name="dataentry"
-                   value="@myname" />
-        </div>
-        <div class="offset-1">
-            <label id="lblGameGroup">Choose your Meal Items</label><br />
-            <input type="checkbox" id="GameGroup" name="GameGroup" value="Steak"
-                   @(Array.IndexOf(choices.Split(','), "Steak") >= 0 ? "checked" : "") />Steak<br />
-            <input type="checkbox" id="GameGroup" name="GameGroup" value="Seafood"
-                   @(Array.IndexOf(choices.Split(','), "Seafood") >= 0 ? "checked" : "") />Seafood<br />
-            <input type="checkbox" id="GameGroup" name="GameGroup" value="Vegetables"
-                   @(Array.IndexOf(choices.Split(','), "Vegetables") >= 0 ? "checked" : "") />Vegetables<br />
-        </div>
-
+    <div>
+        <div class="row">
+            <div class="col-3">
+                <label class="col" id="label1" for="dataentry">Customer Name:</label>&nbsp;&nbsp;
+                <input type="text" id="dataentry" name="dataentry"
+                       value="@myname" />
+            </div>
+            <div class="col-9">
+                <label id="lblGameGroup">Choose your Meal Items</label><br />
+                <input type="checkbox" id="GameGroup" name="GameGroup" value="Steak"
+                       @(Array.IndexOf(choices.Split(','), "Steak") >= 0 ? "checked" : "") />Steak<br />
+                <input type="checkbox" id="GameGroup" name="GameGroup" value="Seafood"
+                       @(Array.IndexOf(choices.Split(','), "Seafood") >= 0 ? "checked" : "") />Seafood<br />
+                <input type="checkbox" id="GameGroup" name="GameGroup" value="Vegetables"
+                       @(Array.IndexOf(choices.Split(','), "Vegetables") >= 0 ? "checked" : "") />Vegetables<br />
+            </div>
+        </div>        
     </div>
     <br /><br />
     <div class="row">
