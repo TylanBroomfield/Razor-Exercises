@@ -1,8 +1,72 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = string.Format("Razor - {0}", "Exercise 02_B");
+
+
+    string artistid = "";
+    string artistname = "";
+   
+    var cid = Request.QueryString["cid"];
+   
+    if (string.IsNullOrEmpty(cid))
+    {
+        Response.Redirect("Exercise02_A.cshtml");
+    }
+    
+    var db = Database.Open("CHINOOK");
+
+    string sqlcommand1 = "SELECT ArtistId, Name FROM Artists WHERE Name LIKE @0 ORDER BY Name";
+    var partialstring = "%" + cid + "%";
+    var results = db.Query(sqlcommand1, partialstring);
+    if (results.Count() == 0)
+    {
+        <p style="color:firebrick">There was no record returned from the Data Base</p>
+    }
+    else
+    {
+        <p style="color:darkgreen">There was @results.Count() record/s returned from the Data Base, please select one.</p>
+    }
 }
 
-    @section banner {
-        <h1>@Page.Title</h1>
+@section banner {
+    <h1>@Page.Title</h1>
+}
+
+@if (IsPost)
+{
+    var choice = Request.Form["userSelect"];
+
+    
+
+    switch (choice)
+    {
+        case :
+            {
+
+            }
+
+        case :
+            {
+
+            }
+
+        default:
+            {
+                <p>could not complete the query</p>
+            }
+
     }
+}
+
+<form id="EX02" method="post">
+    <select id="userSelect" name="userSelect">
+        @foreach (var row in results)
+        {
+            <option value="@row.Name">@row.Name</option>
+        }
+    </select>
+    <button type="submit" id="theButton" name="theButton" value="submit"
+            class="btn btn-primary">
+        Go To ...
+    </button>
+</form>

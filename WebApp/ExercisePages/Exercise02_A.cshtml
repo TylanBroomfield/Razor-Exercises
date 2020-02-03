@@ -5,14 +5,14 @@
     string artistid = "";
     string artistname = "";
 
-    var artistarg = Request.Form["artistArg"];
+    var artistArg = Request.Form["artistArg"];
     var thebutton = Request.Form["theButton"];
 
     var db = Database.Open("CHINOOK");
 
     string sqlcommand1 = "SELECT ArtistId FROM Artists WHERE Name LIKE @0";
 
-    var partialstring = "%" + artistarg + "%";
+    var partialstring = "%" + artistArg + "%";
     var results = db.Query(sqlcommand1, partialstring);
 }
 
@@ -23,11 +23,10 @@
 
 @if (IsPost)
 {
-    <p>IsPost = true</p>
     if (thebutton.Equals("reset"))
     {
         <p style="color:darkblue">The Reset Button was just Pressed</p>
-        artistarg = "";
+        artistArg = "";
         artistid = "";
     }
     else
@@ -35,21 +34,20 @@
         if (results.Count() == 0)
         {
             <p style="color:firebrick">There was no record returned from the Data Base</p>
-            artistarg = "";
+            artistArg = "";
             artistid = "";
         }
         else
         {
-            Response.Redirect("SimpleQueryLikePage2.cshtml?cid=" + artistarg);
+            Response.Redirect("Exercise02_B.cshtml?cid=" + artistArg);
             <p style="color:darkgreen">There was @results.Count() record/s returned from the Data Base</p>
         }
     }
 }
 else
 {
-    <p>IsPost = false</p>
-    <p style="color:darkblue">The Data Base has NOT been queried</p>
-    artistarg = "";
+    <p style="color:darkblue">The Data Base has not been queried</p>
+    artistArg = "";
 }
 
 <form id="EX02" method="post">
@@ -58,7 +56,7 @@ else
             <div class="offset-1">
                 <label id="lblartistArg" for="artistArg">Enter a partial artist name:</label>&nbsp;&nbsp;
                 <input type="text" id="artistArg" name="artistArg"
-                       value="@artistarg" placeholder="partial artist name" />
+                       value="@artistArg" placeholder="partial artist name" />
                 <br /><br />
                 <button type="submit" id="theButton" name="theButton"
                         value="submit" class="btn btn-primary">
