@@ -5,14 +5,14 @@
 
     string artistid = "";
     string artistname = "";
-   
+
     var cid = Request.QueryString["cid"];
-   
+
     if (string.IsNullOrEmpty(cid))
     {
         Response.Redirect("Exercise02_A.cshtml");
     }
-    
+
     var db = Database.Open("CHINOOK");
 
     string sqlcommand1 = "SELECT ArtistId, Name FROM Artists WHERE Name LIKE @0 ORDER BY Name";
@@ -34,39 +34,62 @@
 
 @if (IsPost)
 {
-    var choice = Request.Form["userSelect"];
-
-    
-
-    switch (choice)
+    //obtain my data from the form
+    var choice = Request.Form["CategoryList"];
+    //check for a selection
+    if (choice.Equals("0"))
     {
-        case :
-            {
+        <p style="color:firebrick">choose an artist</p>
+    }
+    else
+    {
+        var prodquery = @"SELECT ArtistID
+                          FROM Artists
+                          WHERE ArtistID LIKE @0
+                          GROUP BY ArtistID";
 
-            }
+        var prodinfo = db.Query(prodquery, choice);
+        if (prodinfo.Count() == 0)
+        {
+            <p style="color:firebrick">There are no products for the selected category.</p>
+        }
+        else
+        {
 
-        case :
-            {
-
-            }
-
-        default:
-            {
-                <p>could not complete the query</p>
-            }
-
+            Response.Redirect("Exercise02_C.cshtml?cid=" + choice);
+        }
+    }
+}
+else
+{
+    if (results.Count() == 0)
+    {
+        <p style="color:firebrick">There are no categories on file.</p>
     }
 }
 
-<form id="EX02" method="post">
-    <select id="userSelect" name="userSelect">
-        @foreach (var row in results)
-        {
-            <option value="@row.Name">@row.Name</option>
-        }
-    </select>
-    <button type="submit" id="theButton" name="theButton" value="submit"
-            class="btn btn-primary">
-        Go To ...
-    </button>
+<form id="theform" method="post">
+    <div class="offset-3">
+        <label id="lblCategoryList" for="CategoryList">Select product category to view:</label>
+        &nbsp;&nbsp;
+        <select id="CategoryList" name="CategoryList">
+            <option value="0">select ....</option>
+            @foreach (var item in results)
+            {
+                //walk through the record collection of Category records
+                //for each record in the collection you will create an option line
+                //the display text will be the CategoryName
+                //the value attribute will use the CategoryID (FKey on Products)
+                //reminder of data access on a record
+                // a) index   syntax item[index]
+                // b) property name  syntax item.PropertyName (column title on the SQL select)
+                <option value="@item.ArtistID">@item.Name</option>
+            }
+        </select>
+        &nbsp;&nbsp;
+        <button type="submit" id="theButton" name="theButton" value="submit"
+                class="btn btn-primary">
+            View Category Products ...
+        </button>
+    </div>
 </form>
