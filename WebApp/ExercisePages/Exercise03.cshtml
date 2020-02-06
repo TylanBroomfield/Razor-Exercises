@@ -2,8 +2,135 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = string.Format("Razor - {0}", "Exercise 03");
     //Layout = "Your Layout Page goes here";
+
+    var artistId = "0";
+    var title = "";
+    var releaseYear = "0";
+    var releaseLabel = "";
+
+    var db = Database.Open("CHINOOK");
+
+    var artistQuery = @"SELECT ArtistID, Name FROM Artist ORDERED BY NAME";
+    var artistRecords = db.Query(artistQuery);
+
+    List<SelectListItem> artistitems = new List<SelectListItem>();
+    artistitems.Add(new SelectListItem
+    {
+        Value = "0",
+        Text = "select..."
+    });
+    foreach (var record in artistRecords)
+    {
+        artistitems.Add(new SelectListItem
+        {
+            Value = record.SupplierID.ToString(),
+            Text = record.CompanyName
+        });
+    }
+
+    Validation.Add("ArtistID",
+         Validator.Required("ArtistID is required"));
+
+
+    Validation.Add("Title",
+          Validator.Required("Title is required"),
+          Validator.StringLength(160, 0, "maximum 160 characters"));
+
+    Validation.Add("ReleaseYear",
+        Validator.Required("Field is required"),
+        Validator.Integer("unit must be a number"),
+         Validator.Range(2020, 1950, "Can not be past 2020 or before 1950"));
+
+    Validation.Add("ReleaseLabel",
+        Validator.StringLength(50, 0, "Unit price is a money field."));
+
 }
 
 @section banner {
     <h1>@Page.Title</h1>
 }
+
+@if (IsPost)
+{
+    artistId = Request.Form["ArtistID"];
+    title = Request.Form["Title"];
+    releaseYear = Request.Form["ReleaseYear"];
+    releaseLabel = Request.Form["ReleaseLabel"];
+
+    var thebutton = Request.Form["FormButton"];
+
+    if (thebutton.Equals("Clear"))
+    {
+        artistId = "0";
+        title = "";
+        releaseYear = "0";
+        releaseLabel = "";
+    }
+    else
+    {
+        if (Validation.IsValid())  //good data
+        {
+            try
+            {
+                var inscommand = @"INSERT INTO Albums (Title, ArtistId, ReleaseYear, ReleaseLabel) VALUES(@0, @1, @2, @3)";
+                db.Execute(inscommand, productname,
+                    supplierid.Equals("0") ? null : supplierid,
+                    categoryid.Equals("0") ? null : categoryid,
+                    string.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
+                    string.IsNullOrEmpty(unitprice) ? null : unitprice,
+                    string.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
+                    string.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
+                    string.IsNullOrEmpty(reorderlevel) ? null : reorderlevel);
+                <div class="col-12 text-center">
+                    <p style="color:green">
+                        Album has been Added
+                    </p>
+                </div>
+            }
+            catch (Exception ex)
+            {
+                <div class="col-12 text-center">
+                    <p style="color:firebrick; font-size:large">
+                        Processing error: @ex.Message
+                    </p>
+                </div>
+            }
+        }
+    }
+
+    <fieldset>
+        <legend>Web Pages with Validation</legend>
+        <form id="theform" method="post">
+            <div class="row offset-1">
+                <label class="label" for="ProductName">ArtistID:</label>&nbsp;&nbsp;
+                <span>@Html.DropDownList("ArtistID", artistId)</span>
+                @Html.ValidationMessage("ArtistID")
+            </div>
+            <div class="row offset-1">
+                <label class="label" for="SupplierList">Title:</label>&nbsp;&nbsp;
+                <span>@Html.TextBox("Title", title)</span>
+                @Html.ValidationMessage("Title")
+            </div>
+            <div class="row offset-1">
+                <label class="label" for="CategoryList">Release year:</label>&nbsp;&nbsp;
+                <span>@Html.TextBox("ReleaseYear", releaseYear)</span>
+                @Html.ValidationMessage("ReleaseYear")
+            </div>
+            <div class="row offset-1">
+                <label class="label" for="QuantityPerUnit">Release Label:</label>&nbsp;&nbsp;
+                <span>@Html.TextBox("ReleaseLabel", releaseLabel)</span>
+                @Html.ValidationMessage("ReleaseLabel")
+            </div> 
+            <div class="row offset-1">
+                <button type="submit" id="FormButton" name="FormButton"
+                        class="btn btn-primary" value="Add">
+                    Add
+                </button>
+                <button type="submit" id="FormButton" name="FormButton" formnovalidate
+                        class="btn" value="Clear">
+                    Clear
+                </button>
+            </div>
+        </form>
+    </fieldset>
+    @Html.ValidationSummary()
