@@ -23,14 +23,13 @@
     {
         artistitems.Add(new SelectListItem
         {
-            Value = record.SupplierID.ToString(),
-            Text = record.CompanyName
+            Value = record.ArtistID.ToString(),
+            Text = record.Name
         });
     }
 
     Validation.Add("ArtistID",
          Validator.Required("ArtistID is required"));
-
 
     Validation.Add("Title",
           Validator.Required("Title is required"),
@@ -73,14 +72,11 @@
             try
             {
                 var inscommand = @"INSERT INTO Albums (Title, ArtistId, ReleaseYear, ReleaseLabel) VALUES(@0, @1, @2, @3)";
-                db.Execute(inscommand, productname,
-                    supplierid.Equals("0") ? null : supplierid,
-                    categoryid.Equals("0") ? null : categoryid,
-                    string.IsNullOrEmpty(quantityperunit) ? null : quantityperunit,
-                    string.IsNullOrEmpty(unitprice) ? null : unitprice,
-                    string.IsNullOrEmpty(unitsinstock) ? null : unitsinstock,
-                    string.IsNullOrEmpty(unitsonorder) ? null : unitsonorder,
-                    string.IsNullOrEmpty(reorderlevel) ? null : reorderlevel);
+                db.Execute(inscommand, title,
+                    artistId.Equals("0") ? null : artistId,
+                    releaseYear.Equals("0") ? null : releaseYear,
+                    string.IsNullOrEmpty(releaseLabel) ? null : releaseLabel);
+
                 <div class="col-12 text-center">
                     <p style="color:green">
                         Album has been Added
@@ -97,13 +93,14 @@
             }
         }
     }
+}
 
     <fieldset>
         <legend>Web Pages with Validation</legend>
         <form id="theform" method="post">
             <div class="row offset-1">
                 <label class="label" for="ProductName">ArtistID:</label>&nbsp;&nbsp;
-                <span>@Html.DropDownList("ArtistID", artistId)</span>
+                <span>@Html.DropDownList("ArtistID", artistitems)</span>
                 @Html.ValidationMessage("ArtistID")
             </div>
             <div class="row offset-1">
