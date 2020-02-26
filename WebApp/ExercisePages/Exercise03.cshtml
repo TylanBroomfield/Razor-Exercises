@@ -10,7 +10,7 @@
 
     var db = Database.Open("CHINOOK");
 
-    var artistQuery = @"SELECT ArtistID, Name FROM Artist ORDERED BY NAME";
+    var artistQuery = @"SELECT ArtistID, Name FROM Artist ORDER BY Name";
     var artistRecords = db.Query(artistQuery);
 
     List<SelectListItem> artistitems = new List<SelectListItem>();

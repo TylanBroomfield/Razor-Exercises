@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = string.Format("Razor - {0}", "Exercise 04");
+    //Layout = "Your Layout Page goes here";
+
+    var pid = Request.QueryString["pid"];
+    if (pid.IsEmpty())
+    {
+        Response.Redirect("ProductSearch.cshtml");
+    }
+    var productid = Request.Form["ProductID"];
+    var productname = Request.Form["ProductName"];
+    var supplierid = Request.Form["SupplierList"];
+    var categoryid = Request.Form["CategoryList"];
+
+   
+}
+
+
+@section banner {
+    <h1>@Page.Title</h1>
+}
+
+
+
+    
